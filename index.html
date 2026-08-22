@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V380 Pro - Diagnostic View (ID: 87853128)</title>
+    <title>V380 Pro - Live Stream (ID: 87853128)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- Lucide Icons -->
@@ -69,7 +69,7 @@
         .menu-item:hover { background: #fafafa; }
     </style>
 </head>
-<body onload="diagnoseConnection()">
+<body onload="startLiveStream()">
 
     <div class="phone-frame">
         <!-- Top Bar V380 Pro -->
@@ -78,39 +78,39 @@
                 <span style="font-size: 18px; font-weight: bold; cursor: pointer;">&lt;</span>
                 <span style="font-size: 15px; font-weight: 600;">Live (ID: 87853128)</span>
             </div>
-            <button id="statusBadge" style="background: #fee2e2; color: #dc2626; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">TERBLOKIR BROWSER</button>
+            <button id="statusBadge" style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">LIVE</button>
         </div>
 
-        <!-- Area Kotak Video & Pesan Diagnostik -->
+        <!-- Area Kotak Video Live CCTV -->
         <div class="video-box">
-            <div style="position: absolute; inset: 0; background: #070d14; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
-                <i data-lucide="shield-alert" style="width: 36px; height: 36px; color: #f87171; margin-bottom: 8px;"></i>
-                <p style="font-size: 12px; font-weight: bold; color: #fca5a5; margin-bottom: 4px;">Koneksi Langsung Dibatasi Browser</p>
-                <p style="font-size: 10px; color: #9ca3af; line-height: 1.4;">IP 192.168.0.186 (Port 8899/81) dilindungi kebijakan CORS & tanpa decoder RTSP.</p>
-            </div>
+            <!-- Elemen Gambar Live Stream Langsung ke IP 192.168.0.186 -->
+            <img id="cctvVideoFeed" 
+                 style="width: 100%; height: 100%; object-fit: cover;" 
+                 alt="Memuat Live CCTV..."
+                 onerror="handleStreamFail()">
 
             <!-- Indikator Layar Atas Video -->
             <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">1080P HD</div>
             <div id="cctvTimestamp" style="position: absolute; top: 10px; right: 10px; color: #fff; font-size: 11px; font-family: monospace; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">--:--:--</div>
         </div>
 
-        <!-- Menu Pilihan Solusi -->
+        <!-- Menu Informasi -->
         <div style="flex: 1; background-color: #f4f6f8; overflow-y: auto;">
-            <div class="menu-item" onclick="alert('Gunakan aplikasi V380 Pro resmi di HP untuk melihat stream asli secara penuh, atau gunakan software gateway lokal seperti go2rtc di PC.')">
+            <div class="menu-item" onclick="alert('Terhubung ke IP: 192.168.0.186 | ID: 87853128')">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #3b82f6;"><i data-lucide="help-circle" style="width: 20px; height: 20px;"></i></span>
+                    <span style="color: #3b82f6;"><i data-lucide="video" style="width: 20px; height: 20px;"></i></span>
                     <div>
-                        <span style="font-size: 14px; font-weight: 500; display: block;">Solusi Tampil di Web</span>
-                        <span style="font-size: 11px; color: #6b7280;">Klik untuk info cara bypass CORS</span>
+                        <span style="font-size: 14px; font-weight: 500; display: block;">Kamera Utama V380</span>
+                        <span style="font-size: 11px; color: #6b7280;">IP: 192.168.0.186 (Lokal)</span>
                     </div>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
 
-            <div class="menu-item" onclick="diagnoseConnection()">
+            <div class="menu-item" onclick="startLiveStream()">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="color: #16a34a;"><i data-lucide="refresh-cw" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Cek Ulang Jaringan Lokal</span>
+                    <span style="font-size: 14px; font-weight: 500;">Muat Ulang Stream</span>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
@@ -138,17 +138,38 @@
     </div>
 
     <script>
-        function diagnoseConnection() {
+        const ipCctv = "192.168.0.186";
+
+        // Fungsi memuat stream langsung ke tag gambar
+        function startLiveStream() {
+            const img = document.getElementById("cctvVideoFeed");
             const badge = document.getElementById("statusBadge");
+
             badge.style.background = "#fef3c7";
             badge.style.color = "#d97706";
-            badge.textContent = "MEMERIKSA PORT...";
+            badge.textContent = "MEMUAT...";
 
-            setTimeout(() => {
+            // Mengarahkan langsung ke port stream HTTP standar kamera lokal
+            img.src = `http://${ipCctv}:81/stream?t=` + new Date().getTime();
+
+            img.onload = function() {
+                badge.style.background = "#dcfce7";
+                badge.style.color = "#16a34a";
+                badge.textContent = "LIVE";
+            };
+        }
+
+        // Penanganan otomatis jika port 81 gagal, mencoba port standar web camera 80
+        function handleStreamFail() {
+            const img = document.getElementById("cctvVideoFeed");
+            if (!img.src.includes(":80/")) {
+                img.src = `http://${ipCctv}/stream?t=` + new Date().getTime();
+            } else {
+                const badge = document.getElementById("statusBadge");
                 badge.style.background = "#fee2e2";
                 badge.style.color = "#dc2626";
-                badge.textContent = "TERBLOKIR BROWSER";
-            }, 1500);
+                badge.textContent = "OFFLINE";
+            }
         }
 
         // Jam real-time pada video
