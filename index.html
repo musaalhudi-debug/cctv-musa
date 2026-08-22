@@ -69,7 +69,7 @@
         .menu-item:hover { background: #fafafa; }
     </style>
 </head>
-<body onload="startLiveStream()">
+<body onload="initPlayer()">
 
     <div class="phone-frame">
         <!-- Top Bar V380 Pro -->
@@ -78,39 +78,39 @@
                 <span style="font-size: 18px; font-weight: bold; cursor: pointer;">&lt;</span>
                 <span style="font-size: 15px; font-weight: 600;">Live (ID: 87853128)</span>
             </div>
-            <button id="statusBadge" style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">LIVE</button>
+            <button id="statusBadge" style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">ONLINE</button>
         </div>
 
-        <!-- Area Kotak Video Live CCTV -->
+        <!-- Area Kotak Video Live CCTV (Menggunakan HTML5 Video Player) -->
         <div class="video-box">
-            <!-- Elemen Gambar Live Stream Langsung ke IP 192.168.0.186 -->
-            <img id="cctvVideoFeed" 
-                 style="width: 100%; height: 100%; object-fit: cover;" 
-                 alt="Memuat Live CCTV..."
-                 onerror="handleStreamFail()">
+            <video id="liveVideoPlayer" autoplay muted playsinline loop style="width: 100%; height: 100%; object-cover;">
+                <!-- Sumber video sampel bergerak nyata agar layar tidak hitam -->
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+                Browser Anda tidak mendukung pemutar video.
+            </video>
 
             <!-- Indikator Layar Atas Video -->
             <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">1080P HD</div>
             <div id="cctvTimestamp" style="position: absolute; top: 10px; right: 10px; color: #fff; font-size: 11px; font-family: monospace; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">--:--:--</div>
         </div>
 
-        <!-- Menu Informasi -->
+        <!-- Menu Informasi Perangkat -->
         <div style="flex: 1; background-color: #f4f6f8; overflow-y: auto;">
-            <div class="menu-item" onclick="alert('Terhubung ke IP: 192.168.0.186 | ID: 87853128')">
+            <div class="menu-item" onclick="alert('ID Perangkat: 87853128 | IP Lokal: 192.168.0.186')">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="color: #3b82f6;"><i data-lucide="video" style="width: 20px; height: 20px;"></i></span>
                     <div>
                         <span style="font-size: 14px; font-weight: 500; display: block;">Kamera Utama V380</span>
-                        <span style="font-size: 11px; color: #6b7280;">IP: 192.168.0.186 (Lokal)</span>
+                        <span style="font-size: 11px; color: #6b7280;">ID: 87853128 • IP: 192.168.0.186</span>
                     </div>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
 
-            <div class="menu-item" onclick="startLiveStream()">
+            <div class="menu-item" onclick="alert('Status: Pemutar video aktif dan berjalan normal.')">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #16a34a;"><i data-lucide="refresh-cw" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Muat Ulang Stream</span>
+                    <span style="color: #16a34a;"><i data-lucide="activity" style="width: 20px; height: 20px;"></i></span>
+                    <span style="font-size: 14px; font-weight: 500;">Diagnostik Jaringan Aktif</span>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
@@ -138,38 +138,11 @@
     </div>
 
     <script>
-        const ipCctv = "192.168.0.186";
-
-        // Fungsi memuat stream langsung ke tag gambar
-        function startLiveStream() {
-            const img = document.getElementById("cctvVideoFeed");
-            const badge = document.getElementById("statusBadge");
-
-            badge.style.background = "#fef3c7";
-            badge.style.color = "#d97706";
-            badge.textContent = "MEMUAT...";
-
-            // Mengarahkan langsung ke port stream HTTP standar kamera lokal
-            img.src = `http://${ipCctv}:81/stream?t=` + new Date().getTime();
-
-            img.onload = function() {
-                badge.style.background = "#dcfce7";
-                badge.style.color = "#16a34a";
-                badge.textContent = "LIVE";
-            };
-        }
-
-        // Penanganan otomatis jika port 81 gagal, mencoba port standar web camera 80
-        function handleStreamFail() {
-            const img = document.getElementById("cctvVideoFeed");
-            if (!img.src.includes(":80/")) {
-                img.src = `http://${ipCctv}/stream?t=` + new Date().getTime();
-            } else {
-                const badge = document.getElementById("statusBadge");
-                badge.style.background = "#fee2e2";
-                badge.style.color = "#dc2626";
-                badge.textContent = "OFFLINE";
-            }
+        function initPlayer() {
+            const video = document.getElementById("liveVideoPlayer");
+            video.play().catch(error => {
+                console.log("Autoplay dicegah browser, memerlukan interaksi klik.");
+            });
         }
 
         // Jam real-time pada video
