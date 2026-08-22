@@ -3,160 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V380 Pro - Live Stream (ID: 87853128)</title>
+    <title>TinyCam Web - V380 Pro (ID: 87853128)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- Lucide Icons -->
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
         body {
-            background-color: #0b0f15;
-            color: #f3f4f6;
+            background-color: #121212;
+            color: #e0e0e0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
-        .phone-frame {
+        .tinycam-frame {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             height: 100vh;
-            max-height: 850px;
-            background-color: #f4f6f8;
-            color: #1f2937;
+            max-height: 900px;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 1px solid #333;
         }
-        @media (min-width: 421px) {
-            .phone-frame { border-radius: 30px; border: 10px solid #1f2937; }
+        @media (min-width: 441px) {
+            .tinycam-frame { border-radius: 16px; }
         }
-        .video-box {
+        /* Layar Kamera ala TinyCam */
+        .cam-viewport {
             position: relative;
             width: 100%;
-            height: 250px;
+            height: 260px;
             background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
-        .toolbar-btn {
+        .cam-overlay-top {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            color: #00ffcc;
+            text-shadow: 1px 1px 2px #000;
+            z-index: 10;
+        }
+        .cam-overlay-bottom {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            z-index: 10;
+        }
+        /* Panel Kontrol ala TinyCam */
+        .control-panel {
+            background-color: #2c2c2c;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            border-bottom: 1px solid #3d3d3d;
+        }
+        .ctrl-btn {
+            background-color: #383838;
+            color: #fff;
+            border: 1px solid #4a4a4a;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 11px;
-            color: #4b5563;
-            background: none;
-            border: none;
-            cursor: pointer;
             gap: 4px;
-        }
-        .toolbar-btn:hover { color: #2563eb; }
-        .menu-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #ffffff;
-            padding: 14px 16px;
-            border-bottom: 1px solid #f0f2f5;
             cursor: pointer;
         }
-        .menu-item:hover { background: #fafafa; }
+        .ctrl-btn:hover { background-color: #454545; border-color: #00ffcc; }
+        .settings-group {
+            padding: 12px;
+            background-color: #252525;
+            border-bottom: 1px solid #333;
+        }
+        .input-tiny {
+            background-color: #181818;
+            border: 1px solid #444;
+            color: #00ffcc;
+            font-family: 'Share Tech Mono', monospace;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .input-tiny:focus { outline: none; border-color: #00ffcc; }
     </style>
 </head>
-<body onload="initPlayer()">
+<body>
 
-    <div class="phone-frame">
-        <!-- Top Bar V380 Pro -->
-        <div style="background-color: #ffffff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 18px; font-weight: bold; cursor: pointer;">&lt;</span>
-                <span style="font-size: 15px; font-weight: 600;">Live (ID: 87853128)</span>
+    <div class="tinycam-frame">
+        <!-- TinyCam Header Bar -->
+        <div style="background-color: #262626; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #00ffcc;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-weight: bold; color: #00ffcc;">[CAM 1]</span>
+                <span style="font-size: 14px; font-weight: 500;">V380 Pro (87853128)</span>
             </div>
-            <button id="statusBadge" style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">ONLINE</button>
+            <span id="connectionBadge" style="font-size: 10px; font-family: 'Share Tech Mono', monospace; background: #b91c1c; color: #fff; padding: 2px 6px; border-radius: 3px;">DISCONNECTED</span>
         </div>
 
-        <!-- Area Kotak Video Live CCTV -->
-        <div class="video-box">
-            <!-- Video Player dengan sumber langsung yang kompatibel dengan semua HP -->
-            <video id="liveVideoPlayer" autoplay muted playsinline loop style="width: 100%; height: 100%; object-fit: cover;">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-security-camera-recording-a-hallway-42861-large.mp4" type="video/mp4">
-                Browser Anda tidak mendukung pemutar video.
-            </video>
+        <!-- Viewport Kamera Utama (Simulasi / Stream Player) -->
+        <div class="cam-viewport">
+            <div class="cam-overlay-top">
+                <span id="camNameLabel">V380_CCTV_LOKAL</span>
+                <span id="fpsLabel">FPS: 0</span>
+            </div>
+            
+            <!-- Elemen Gambar/Video Stream -->
+            <img id="tinyCamStream" style="width: 100%; height: 100%; object-fit: cover;" alt="Awaiting Stream...">
+            
+            <!-- Pesan Status jika offline -->
+            <div id="offlineMessage" style="position: absolute; inset: 0; background: rgba(18,18,18,0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+                <i data-lucide="video-off" style="width: 32px; height: 32px; color: #ef4444; margin-bottom: 6px;"></i>
+                <p style="font-size: 12px; color: #fca5a5; font-weight: bold;">Stream RTSP/ONVIF Membutuhkan Gateway</p>
+                <p style="font-size: 10px; color: #9ca3af; margin-top: 4px;">Periksa konfigurasi IP & Port di bawah ini.</p>
+            </div>
 
-            <!-- Indikator Layar Atas Video -->
-            <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">1080P HD</div>
-            <div id="cctvTimestamp" style="position: absolute; top: 10px; right: 10px; color: #fff; font-size: 11px; font-family: monospace; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">--:--:--</div>
+            <div class="cam-overlay-bottom" id="timestampOverlay">2026-08-23 00:00:00</div>
         </div>
 
-        <!-- Menu Informasi Perangkat -->
-        <div style="flex: 1; background-color: #f4f6f8; overflow-y: auto;">
-            <div class="menu-item" onclick="alert('ID Perangkat: 87853128 | IP Lokal: 192.168.0.186')">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #3b82f6;"><i data-lucide="video" style="width: 20px; height: 20px;"></i></span>
-                    <div>
-                        <span style="font-size: 14px; font-weight: 500; display: block;">Kamera Utama V380</span>
-                        <span style="font-size: 11px; color: #6b7280;">ID: 87853128 • IP: 192.168.0.186</span>
-                    </div>
+        <!-- TinyCam Control Bar (PTZ, Audio, Snapshot, Resize) -->
+        <div class="control-panel">
+            <button class="ctrl-btn" onclick="alert('PTZ Pan/Tilt Bergerak')">
+                <i data-lucide="compass" style="width: 16px; height: 16px; color: #00ffcc;"></i>
+                <span>PTZ</span>
+            </button>
+            <button class="ctrl-btn" onclick="alert('Snapshot disimpan ke perangkat')">
+                <i data-lucide="camera" style="width: 16px; height: 16px; color: #00ffcc;"></i>
+                <span>Snapshot</span>
+            </button>
+            <button class="ctrl-btn" onclick="alert('Audio Intercom Aktif')">
+                <i data-lucide="mic" style="width: 16px; height: 16px; color: #00ffcc;"></i>
+                <span>Audio</span>
+            </button>
+            <button class="ctrl-btn" onclick="connectCamera()">
+                <i data-lucide="refresh-cw" style="width: 16px; height: 16px; color: #00ffcc;"></i>
+                <span>Reconnect</span>
+            </button>
+        </div>
+
+        <!-- Panel Konfigurasi Kamera ala TinyCam (IP, Port 8899, RTSP, User/Pass) -->
+        <div class="settings-group" style="flex: 1; overflow-y: auto;">
+            <p style="font-size: 11px; font-weight: bold; color: #00ffcc; margin-bottom: 8px; text-transform: uppercase;">Konfigurasi Kamera (TinyCam Mode)</p>
+            
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <div>
+                    <label style="font-size: 10px; color: #9ca3af; display: block; margin-bottom: 2px;">Alamat IP</label>
+                    <input id="ipField" class="input-tiny" type="text" value="192.168.0.186">
                 </div>
-                <span style="color: #9ca3af;">&gt;</span>
-            </div>
-
-            <div class="menu-item" onclick="alert('Status: Pemutar video stream aktif.')">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #16a34a;"><i data-lucide="activity" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Status Sambungan Normal</span>
+                <div>
+                    <label style="font-size: 10px; color: #9ca3af; display: block; margin-bottom: 2px;">Port ONVIF</label>
+                    <input id="portField" class="input-tiny" type="text" value="8899">
                 </div>
-                <span style="color: #9ca3af;">&gt;</span>
             </div>
-        </div>
 
-        <!-- Toolbar Bawah V380 Pro -->
-        <div style="background-color: #ffffff; padding: 12px 10px; display: flex; justify-content: space-around; border-top: 1px solid #e5e7eb;">
-            <button class="toolbar-btn" onclick="alert('Kontrol PTZ Aktif')">
-                <span style="background: #eff6ff; padding: 8px; border-radius: 50%; color: #2563eb;"><i data-lucide="move" style="width: 18px; height: 18px;"></i></span>
-                PTZ
-            </button>
-            <button class="toolbar-btn" onclick="alert('Snapshot berhasil disimpan!')">
-                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="camera" style="width: 18px; height: 18px;"></i></span>
-                Foto
-            </button>
-            <button class="toolbar-btn" onclick="alert('Intercom Berbicara Aktif')">
-                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="mic" style="width: 18px; height: 18px;"></i></span>
-                Berbicara
-            </button>
-            <button class="toolbar-btn" onclick="alert('Merekam video lokal')">
-                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="video" style="width: 18px; height: 18px;"></i></span>
-                Rekaman
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <div>
+                    <label style="font-size: 10px; color: #9ca3af; display: block; margin-bottom: 2px;">Username</label>
+                    <input id="userField" class="input-tiny" type="text" value="admin">
+                </div>
+                <div>
+                    <label style="font-size: 10px; color: #9ca3af; display: block; margin-bottom: 2px;">Password</label>
+                    <input id="passField" class="input-tiny" type="password" value="">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label style="font-size: 10px; color: #9ca3af; display: block; margin-bottom: 2px;">ID Perangkat V380 Pro</label>
+                <input class="input-tiny" type="text" value="87853128" readonly style="color: #93c5fd;">
+            </div>
+
+            <button onclick="connectCamera()" style="width: 100%; background-color: #00ffcc; color: #121212; font-weight: bold; padding: 8px; border-radius: 4px; border: none; font-size: 12px; cursor: pointer;">
+                Uji & Sambungkan Kamera
             </button>
         </div>
     </div>
 
     <script>
-        function initPlayer() {
-            const video = document.getElementById("liveVideoPlayer");
-            video.play().catch(error => {
-                console.log("Autoplay dicegah oleh browser seluler.");
-            });
+        function connectCamera() {
+            const ip = document.getElementById("ipField").value;
+            const port = document.getElementById("portField").value;
+            const user = document.getElementById("userField").value;
+            const badge = document.getElementById("connectionBadge");
+            const offlineMsg = document.getElementById("offlineMessage");
+            const imgStream = document.getElementById("tinyCamStream");
+            const fpsLabel = document.getElementById("fpsLabel");
+
+            badge.style.background = "#d97706";
+            badge.textContent = "CONNECTING...";
+            
+            // Mencoba menarik stream MJPEG port 81 atau snapshot
+            imgStream.src = `http://${ip}:81/stream?t=` + new Date().getTime();
+
+            imgStream.onload = function() {
+                badge.style.background = "#16a34a";
+                badge.textContent = "ONLINE (RTSP/MJPEG)";
+                offlineMsg.style.display = "none";
+                fpsLabel.textContent = "FPS: 25";
+            };
+
+            imgStream.onerror = function() {
+                badge.style.background = "#dc2626";
+                badge.textContent = "PORT TIMEOUT";
+                offlineMsg.style.display = "flex";
+                fpsLabel.textContent = "FPS: 0";
+            };
         }
 
-        // Jam real-time pada video
-        function updateLiveClock() {
+        // Jam real-time ala TinyCam
+        function updateTinyClock() {
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
             const time = now.toTimeString().split(' ')[0];
-            document.getElementById('cctvTimestamp').textContent = `${year}-${month}-${day} ${time}`;
+            document.getElementById('timestampOverlay').textContent = `${year}-${month}-${day} ${time}`;
         }
 
-        setInterval(updateLiveClock, 1000);
-        lucide.createIcons();
+        setInterval(updateTinyClock, 1000);
+        document.addEventListener("DOMContentLoaded", () => {
+            connectCamera();
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
