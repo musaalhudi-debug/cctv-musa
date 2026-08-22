@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V380 Pro - Real Live Stream (ID: 87853128)</title>
+    <title>V380 Pro - Auto Connect (ID: 87853128)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- Lucide Icons -->
@@ -20,6 +20,7 @@
             align-items: center;
             min-height: 100vh;
         }
+        /* Container Tampilan HP (Mobile Frame) */
         .phone-frame {
             width: 100%;
             max-width: 420px;
@@ -69,7 +70,7 @@
         .menu-item:hover { background: #fafafa; }
     </style>
 </head>
-<body>
+<body onload="initAutoConnect()">
 
     <div class="phone-frame">
         <!-- Top Bar V380 Pro -->
@@ -78,27 +79,16 @@
                 <span style="font-size: 18px; font-weight: bold; cursor: pointer;">&lt;</span>
                 <span style="font-size: 15px; font-weight: 600;">Live (ID: 87853128)</span>
             </div>
-            <button style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">ONLINE</button>
+            <button id="statusBadge" style="background: #fef3c7; color: #d97706; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">MENGHUBUNGKAN...</button>
         </div>
 
         <!-- Area Kotak Video Live CCTV Asli -->
         <div class="video-box">
-            <!-- 
-              PILIHAN SUMBER LIVE STREAM:
-              1. Jika menggunakan link MJPEG Stream lokal, gunakan tag <img> di bawah ini.
-              2. Jika menggunakan server WebRTC/HLS, ganti dengan tag <video autoplay playsinline controls></video>
-            -->
-            <img id="realCctvStream" 
-                 src="http://192.168.0.186:81/stream" 
+            <!-- Elemen Gambar untuk menarik stream otomatis dari IP 192.168.0.186 -->
+            <img id="autoCctvStream" 
                  style="width: 100%; height: 100%; object-fit: cover;" 
                  alt="Menghubungkan ke CCTV..."
-                 onerror="handleStreamError(this)">
-
-            <!-- Pesan Error jika IP gagal dimuat langsung oleh browser -->
-            <div id="errorOverlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.85); color: #fff; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
-                <p style="font-size: 13px; color: #f87171; font-weight: bold; margin-bottom: 6px;">Gagal Memuat Stream Langsung</p>
-                <p style="font-size: 11px; color: #9ca3af; line-height: 1.4;">Browser memblokir akses HTTP langsung ke IP 192.168.0.186 tanpa Gateway/Converter lokal.</p>
-            </div>
+                 onerror="handleAutoReconnect()">
 
             <!-- Indikator Layar Atas Video -->
             <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;">1080P HD</div>
@@ -107,18 +97,18 @@
 
         <!-- Menu Pilihan -->
         <div style="flex: 1; background-color: #f4f6f8; overflow-y: auto;">
-            <div class="menu-item" onclick="alert('ID Perangkat: 87853128 | IP: 192.168.0.186')">
+            <div class="menu-item" onclick="alert('ID Perangkat: 87853128 | Target IP: 192.168.0.186')">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="color: #3b82f6;"><i data-lucide="info" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Info Perangkat</span>
+                    <span style="font-size: 14px; font-weight: 500;">Status Perangkat (Auto)</span>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
 
-            <div class="menu-item" onclick="location.reload()">
+            <div class="menu-item" onclick="initAutoConnect()">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="color: #16a34a;"><i data-lucide="refresh-cw" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Muat Ulang Stream</span>
+                    <span style="font-size: 14px; font-weight: 500;">Coba Hubungkan Ulang</span>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
@@ -146,9 +136,46 @@
     </div>
 
     <script>
-        // Penanganan jika browser memblokir atau gagal memuat stream IP lokal secara langsung
-        function handleStreamError(imgElement) {
-            document.getElementById('errorOverlay').style.display = 'flex';
+        const targetIp = "192.168.0.186";
+        const deviceId = "87853128";
+        let retryCount = 0;
+
+        // Fungsi yang berjalan otomatis begitu halaman terbuka
+        function initAutoConnect() {
+            const imgElement = document.getElementById("autoCctvStream");
+            const badge = document.getElementById("statusBadge");
+
+            badge.style.background = "#fef3c7";
+            badge.style.color = "#d97706";
+            badge.textContent = "MENGHUBUNGKAN...";
+
+            // Menargetkan stream URL otomatis ke IP CCTV lokal
+            const streamUrl = `http://${targetIp}:81/stream?t=` + new Date().getTime();
+            imgElement.src = streamUrl;
+
+            imgElement.onload = function() {
+                badge.style.background = "#dcfce7";
+                badge.style.color = "#16a34a";
+                badge.textContent = "ONLINE";
+                retryCount = 0;
+            };
+        }
+
+        // Penanganan otomatis jika koneksi awal tertunda/memerlukan jeda
+        function handleAutoReconnect() {
+            retryCount++;
+            const badge = document.getElementById("statusBadge");
+            
+            if (retryCount <= 3) {
+                badge.textContent = `MENCOBA ULANG (${retryCount})...`;
+                setTimeout(() => {
+                    initAutoConnect();
+                }, 2000); // Otomatis mencoba ulang setiap 2 detik
+            } else {
+                badge.style.background = "#fee2e2";
+                badge.style.color = "#dc2626";
+                badge.textContent = "GAGAL LOKAL";
+            }
         }
 
         // Jam real-time pada video
