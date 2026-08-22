@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V380 Pro - ID: 87853128</title>
+    <title>V380 Pro - Real Live Stream (ID: 87853128)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- Lucide Icons -->
@@ -20,7 +20,6 @@
             align-items: center;
             min-height: 100vh;
         }
-        /* Container mirip layar HP */
         .phone-frame {
             width: 100%;
             max-width: 420px;
@@ -42,6 +41,9 @@
             width: 100%;
             height: 250px;
             background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .toolbar-btn {
             display: flex;
@@ -70,90 +72,86 @@
 <body>
 
     <div class="phone-frame">
-        <!-- Top Bar (Header V380 Pro) -->
+        <!-- Top Bar V380 Pro -->
         <div style="background-color: #ffffff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 18px; font-weight: bold; cursor: pointer;">&lt;</span>
-                <span style="font-size: 15px; font-weight: 600;">Pustaka (ID: 87853128)</span>
+                <span style="font-size: 15px; font-weight: 600;">Live (ID: 87853128)</span>
             </div>
-            <button style="background: #e0f2fe; color: #0284c7; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">PEMUTARAN</button>
+            <button style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">ONLINE</button>
         </div>
 
-        <!-- Area Video Live CCTV (Sesuai Screenshot Anda) -->
+        <!-- Area Kotak Video Live CCTV Asli -->
         <div class="video-box">
-            <!-- Jika Anda memiliki stream lokal (misal RTSP converter), pasang tag <video> atau <img> di sini -->
-            <img id="liveFeedImg" src="https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=800" style="width: 100%; height: 100%; object-fit: cover;" alt="Live CCTV">
-            
-            <!-- Indikator Resolusi & Waktu di Pojok Video -->
-            <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">1080P</div>
-            <div id="cctvTimestamp" style="position: absolute; top: 10px; right: 10px; color: #fff; font-size: 11px; font-family: monospace; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">2026-08-23 00:05:09</div>
+            <!-- 
+              PILIHAN SUMBER LIVE STREAM:
+              1. Jika menggunakan link MJPEG Stream lokal, gunakan tag <img> di bawah ini.
+              2. Jika menggunakan server WebRTC/HLS, ganti dengan tag <video autoplay playsinline controls></video>
+            -->
+            <img id="realCctvStream" 
+                 src="http://192.168.0.186:81/stream" 
+                 style="width: 100%; height: 100%; object-fit: cover;" 
+                 alt="Menghubungkan ke CCTV..."
+                 onerror="handleStreamError(this)">
+
+            <!-- Pesan Error jika IP gagal dimuat langsung oleh browser -->
+            <div id="errorOverlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.85); color: #fff; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
+                <p style="font-size: 13px; color: #f87171; font-weight: bold; margin-bottom: 6px;">Gagal Memuat Stream Langsung</p>
+                <p style="font-size: 11px; color: #9ca3af; line-height: 1.4;">Browser memblokir akses HTTP langsung ke IP 192.168.0.186 tanpa Gateway/Converter lokal.</p>
+            </div>
+
+            <!-- Indikator Layar Atas Video -->
+            <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;">1080P HD</div>
+            <div id="cctvTimestamp" style="position: absolute; top: 10px; right: 10px; color: #fff; font-size: 11px; font-family: monospace; background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px;">--:--:--</div>
         </div>
 
-        <!-- Menu Pilihan Tengah (Peristiwa, Pemutaran Awan, Pengaturan) -->
+        <!-- Menu Pilihan -->
         <div style="flex: 1; background-color: #f4f6f8; overflow-y: auto;">
-            <div class="menu-item" onclick="showAlert('Membuka menu Peristiwa & Wawasan AI')">
+            <div class="menu-item" onclick="alert('ID Perangkat: 87853128 | IP: 192.168.0.186')">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #3b82f6;"><i data-lucide="bell" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Peristiwa</span>
+                    <span style="color: #3b82f6;"><i data-lucide="info" style="width: 20px; height: 20px;"></i></span>
+                    <span style="font-size: 14px; font-weight: 500;">Info Perangkat</span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="background: #dbeafe; color: #1d4ed8; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Wawasan AI</span>
-                    <span style="color: #9ca3af;">&gt;</span>
-                </div>
+                <span style="color: #9ca3af;">&gt;</span>
             </div>
 
-            <div class="menu-item" onclick="showAlert('Membuka Pemutaran Awan V380 Pro')">
+            <div class="menu-item" onclick="location.reload()">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #3b82f6;"><i data-lucide="play-circle" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Pemutaran Awan</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="background: #fef3c7; color: #d97706; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Uji Coba Gratis</span>
-                    <span style="color: #9ca3af;">&gt;</span>
-                </div>
-            </div>
-
-            <div class="menu-item" onclick="showAlert('Membuka Pengaturan Kamera ID: 87853128')">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="color: #3b82f6;"><i data-lucide="settings" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Pengaturan</span>
+                    <span style="color: #16a34a;"><i data-lucide="refresh-cw" style="width: 20px; height: 20px;"></i></span>
+                    <span style="font-size: 14px; font-weight: 500;">Muat Ulang Stream</span>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
         </div>
 
-        <!-- Toolbar Bawah (Persis seperti tombol di aplikasi V380 Pro Anda) -->
+        <!-- Toolbar Bawah V380 Pro -->
         <div style="background-color: #ffffff; padding: 12px 10px; display: flex; justify-content: space-around; border-top: 1px solid #e5e7eb;">
-            <button class="toolbar-btn" onclick="showAlert('Membuka Kontrol PTZ Arah Kamera')">
-                <span style="background: #eff6ff; padding: 8px; border-radius: 50%; color: #2563eb;"><i data-lucide="move" style="width: 18px; height: 18px;"><span></span></i></span>
+            <button class="toolbar-btn" onclick="alert('Kontrol PTZ Aktif')">
+                <span style="background: #eff6ff; padding: 8px; border-radius: 50%; color: #2563eb;"><i data-lucide="move" style="width: 18px; height: 18px;"></i></span>
                 PTZ
             </button>
-            <button class="toolbar-btn" onclick="showAlert('Foto Snapshot disimpan!')">
+            <button class="toolbar-btn" onclick="alert('Snapshot berhasil disimpan!')">
                 <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="camera" style="width: 18px; height: 18px;"></i></span>
                 Foto
             </button>
-            <button class="toolbar-btn" onclick="showAlert('Mikrofon Intercom Diaktifkan')">
+            <button class="toolbar-btn" onclick="alert('Intercom Berbicara Aktif')">
                 <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="mic" style="width: 18px; height: 18px;"></i></span>
                 Berbicara
             </button>
-            <button class="toolbar-btn" onclick="showAlert('Memulai Perekaman Video Lokal')">
+            <button class="toolbar-btn" onclick="alert('Merekam video lokal')">
                 <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="video" style="width: 18px; height: 18px;"></i></span>
                 Rekaman
-            </button>
-            <button class="toolbar-btn" onclick="showAlert('Menu Tambahan Lainnya')">
-                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="grid" style="width: 18px; height: 18px;"></i></span>
-                Lagi
             </button>
         </div>
     </div>
 
     <script>
-        // Fungsi simulasi notifikasi aksi tombol
-        function showAlert(pesan) {
-            alert(pesan);
+        // Penanganan jika browser memblokir atau gagal memuat stream IP lokal secara langsung
+        function handleStreamError(imgElement) {
+            document.getElementById('errorOverlay').style.display = 'flex';
         }
 
-        // Auto update waktu live agar jam pada pojok kanan video terus berjalan secara nyata
+        // Jam real-time pada video
         function updateLiveClock() {
             const now = new Date();
             const year = now.getFullYear();
