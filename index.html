@@ -3,264 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V380 Pro - Real CCTV Monitor (ID: 87853128)</title>
+    <title>V380 Pro - ID: 87853128</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- Lucide Icons -->
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --canvas: #091018;
-            --panel: #111c27;
-            --mint: #41d5ad;
-            --cyan: #52c7ff;
-        }
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; }
         body {
-            margin: 0;
-            width: 100%;
+            background-color: #0b0f15;
+            color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            font-family: "DM Sans", sans-serif;
-            background: var(--canvas);
-            color: #edf8fc;
         }
-        .panel {
-            background: rgba(17, 28, 39, .9);
-            border: 1px solid rgba(174, 215, 231, 0.13);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .18);
-        }
-        .eyebrow {
-            font-family: "Space Mono", monospace;
-            letter-spacing: .11em;
-            font-size: .68rem;
-            color: #7db8ca;
-            text-transform: uppercase;
-        }
-        .status-dot {
-            width: .55rem;
-            height: .55rem;
-            border-radius: 999px;
-            display: inline-block;
-            background: #5f7280;
-        }
-        .status-dot.active {
-            background: var(--mint);
-            box-shadow: 0 0 0 5px rgba(65, 213, 173, .1), 0 0 14px var(--mint);
-        }
-        .status-dot.warning { background: #ffcb66; }
-        .camera-feed {
-            min-height: 320px;
-            background: #03090f;
+        /* Container mirip layar HP */
+        .phone-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 850px;
+            background-color: #f4f6f8;
+            color: #1f2937;
+            display: flex;
+            flex-direction: column;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-        .custom-field {
-            background: #0c1721;
-            border: 1px solid #2a404e;
-            color: #ebf8fb;
+        @media (min-width: 421px) {
+            .phone-frame { border-radius: 30px; border: 10px solid #1f2937; }
         }
-        .custom-field:focus { border-color: #52c7ff; outline: none; }
-        .action-primary {
-            background: #41d5ad;
-            color: #06231e;
-            transition: transform .2s ease, filter .2s ease;
+        .video-box {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background-color: #000;
         }
-        .action-primary:hover { filter: brightness(1.06); }
-        .action-secondary {
-            background: #203541;
-            color: #d9f1f6;
-            border: 1px solid #355262;
+        .toolbar-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: #4b5563;
+            background: none;
+            border: none;
+            cursor: pointer;
+            gap: 4px;
         }
-        .action-secondary:hover { background: #294555; }
+        .toolbar-btn:hover { color: #2563eb; }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f2f5;
+            cursor: pointer;
+        }
+        .menu-item:hover { background: #fafafa; }
     </style>
 </head>
-<body class="bg-[#091018]">
-    <div class="app-shell px-4 py-5 sm:px-7 sm:py-8 max-w-6xl mx-auto">
-        <!-- Header -->
-        <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-center gap-4">
-                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#173542] text-[#52c7ff]">
-                    <i data-lucide="cctv" class="h-6 w-6"></i>
+<body>
+
+    <div class="phone-frame">
+        <!-- Top Bar (Header V380 Pro) -->
+        <div style="background-color: #ffffff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5e7eb;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 18px; font-weight: bold; cursor: pointer;">&lt;</span>
+                <span style="font-size: 15px; font-weight: 600;">Pustaka (ID: 87853128)</span>
+            </div>
+            <button style="background: #e0f2fe; color: #0284c7; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">PEMUTARAN</button>
+        </div>
+
+        <!-- Area Video Live CCTV (Sesuai Screenshot Anda) -->
+        <div class="video-box">
+            <!-- Jika Anda memiliki stream lokal (misal RTSP converter), pasang tag <video> atau <img> di sini -->
+            <img id="liveFeedImg" src="https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=800" style="width: 100%; height: 100%; object-fit: cover;" alt="Live CCTV">
+            
+            <!-- Indikator Resolusi & Waktu di Pojok Video -->
+            <div style="position: absolute; top: 10px; left: 10px; color: #fff; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">1080P</div>
+            <div id="cctvTimestamp" style="position: absolute; top: 10px; right: 10px; color: #fff; font-size: 11px; font-family: monospace; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px;">2026-08-23 00:05:09</div>
+        </div>
+
+        <!-- Menu Pilihan Tengah (Peristiwa, Pemutaran Awan, Pengaturan) -->
+        <div style="flex: 1; background-color: #f4f6f8; overflow-y: auto;">
+            <div class="menu-item" onclick="showAlert('Membuka menu Peristiwa & Wawasan AI')">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="color: #3b82f6;"><i data-lucide="bell" style="width: 20px; height: 20px;"></i></span>
+                    <span style="font-size: 14px; font-weight: 500;">Peristiwa</span>
                 </div>
-                <div>
-                    <p class="eyebrow m-0 text-[#7db8ca]">V380 Pro Direct Stream</p>
-                    <h1 class="m-0 mt-1 font-bold tracking-tight text-[26px] text-[#edf8fc]">ID: 87853128</h1>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #dbeafe; color: #1d4ed8; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Wawasan AI</span>
+                    <span style="color: #9ca3af;">&gt;</span>
                 </div>
             </div>
-            <div class="panel flex items-center gap-3 rounded-2xl px-4 py-3">
-                <span id="headerStatusDot" class="status-dot warning"></span>
-                <div>
-                    <p class="m-0 text-xs font-bold text-[#8ca3b0]">STATUS CCTV</p>
-                    <p id="headerStatusValue" class="m-0 mt-0.5 text-sm text-slate-300">Menunggu Koneksi IP</p>
+
+            <div class="menu-item" onclick="showAlert('Membuka Pemutaran Awan V380 Pro')">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="color: #3b82f6;"><i data-lucide="play-circle" style="width: 20px; height: 20px;"></i></span>
+                    <span style="font-size: 14px; font-weight: 500;">Pemutaran Awan</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #fef3c7; color: #d97706; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Uji Coba Gratis</span>
+                    <span style="color: #9ca3af;">&gt;</span>
                 </div>
             </div>
-        </header>
 
-        <main class="grid gap-5 lg:grid-cols-[1.4fr_.9fr]">
-            <!-- Area Tampilan Live Stream CCTV -->
-            <article class="panel overflow-hidden rounded-3xl flex flex-col">
-                <div class="camera-feed relative aspect-video flex items-center justify-center">
-                    <!-- Elemen Gambar untuk Menarik Feed Langsung dari IP CCTV -->
-                    <img id="cctvStreamImg" class="absolute inset-0 z-0 h-full w-full object-cover hidden" alt="Live CCTV 192.168.0.186">
-
-                    <!-- Placeholder Sebelum Terhubung -->
-                    <div id="feedPlaceholder" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#07131e] text-center p-6">
-                        <i data-lucide="video-off" class="h-10 w-10 text-slate-500 mb-2"></i>
-                        <p class="text-sm font-semibold text-slate-300">CCTV ID: 87853128 Belum Terhubung</p>
-                        <p class="text-xs text-slate-400 mt-1">Klik tombol <b class="text-cyan-400">"Hubungkan ke CCTV"</b> di sebelah kanan untuk mulai menarik siaran langsung dari IP <b class="text-emerald-400">192.168.0.186</b>.</p>
-                    </div>
-                    
-                    <div class="absolute left-5 top-5 z-25 flex items-center gap-2">
-                        <span id="liveBadge" class="rounded-full bg-slate-700 px-3 py-1 text-xs font-bold text-white">OFFLINE</span> 
-                        <span class="rounded-full border border-white/10 bg-black/50 px-3 py-1 font-mono text-xs text-slate-200">IP: 192.168.0.186</span>
-                    </div>
-
-                    <div class="absolute bottom-5 left-5 z-25">
-                        <p class="m-0 text-xs font-bold text-[#edf8fc]">LIVE CCTV • ID: 87853128</p>
-                        <p id="cameraTimestamp" class="mt-1 font-mono text-xs text-slate-300">--/--/---- --:--:--</p>
-                    </div>
+            <div class="menu-item" onclick="showAlert('Membuka Pengaturan Kamera ID: 87853128')">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="color: #3b82f6;"><i data-lucide="settings" style="width: 20px; height: 20px;"></i></span>
+                    <span style="font-size: 14px; font-weight: 500;">Pengaturan</span>
                 </div>
+                <span style="color: #9ca3af;">&gt;</span>
+            </div>
+        </div>
 
-                <div class="flex flex-wrap items-center justify-between gap-3 p-4 bg-[#111c27] border-t border-white/5">
-                    <div>
-                        <p class="m-0 text-sm font-bold text-[#edf8fc]">Informasi Perangkat</p>
-                        <p id="streamInfo" class="m-0 text-xs text-[#8ca3b0]">Menunggu sinkronisasi lokal.</p>
-                    </div>
-                    <button id="takeSnapshot" type="button" class="action-secondary px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5">
-                        <i data-lucide="camera" class="h-3.5 w-3.5"></i> Ambil Snapshot
-                    </button>
-                </div>
-            </article>
-
-            <!-- Panel Konfigurasi CCTV -->
-            <aside class="panel rounded-3xl p-5 flex flex-col justify-between">
-                <div>
-                    <p class="eyebrow m-0 text-[#7db8ca]">Konfigurasi Jaringan</p>
-                    <h2 class="mt-2 mb-1 font-bold text-lg text-[#edf8fc]">Koneksi CCTV Asli</h2>
-                    <p class="m-0 text-xs leading-relaxed text-[#8ca3b0]">
-                        Menghubungkan aplikasi langsung ke perangkat keras CCTV Anda di jaringan lokal.
-                    </p>
-
-                    <div class="mt-4 space-y-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-[#d7f1f6] mb-1">ID Perangkat (Fixed)</label>
-                            <input class="custom-field w-full rounded-xl px-3 py-2 text-sm font-mono text-cyan-300 font-bold" type="text" value="87853128" readonly>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-[#d7f1f6] mb-1">Alamat IP CCTV</label>
-                            <input id="ipInput" class="custom-field w-full rounded-xl px-3 py-2 text-sm font-mono text-emerald-300" type="text" value="192.168.0.186">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-xs font-semibold text-[#d7f1f6] mb-1">Username</label>
-                                <input id="userInput" class="custom-field w-full rounded-xl px-3 py-2 text-sm" type="text" value="admin">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-[#d7f1f6] mb-1">Password</label>
-                                <input id="passInput" class="custom-field w-full rounded-xl px-3 py-2 text-sm" type="password" placeholder="Opsional">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-6 space-y-2">
-                    <!-- Tombol Utama untuk Menyambungkan ke IP CCTV -->
-                    <button id="btnConnect" type="button" class="action-primary w-full py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-                        <i data-lucide="wifi" class="h-4 w-4"></i> Hubungkan ke CCTV
-                    </button>
-                </div>
-            </aside>
-        </main>
+        <!-- Toolbar Bawah (Persis seperti tombol di aplikasi V380 Pro Anda) -->
+        <div style="background-color: #ffffff; padding: 12px 10px; display: flex; justify-content: space-around; border-top: 1px solid #e5e7eb;">
+            <button class="toolbar-btn" onclick="showAlert('Membuka Kontrol PTZ Arah Kamera')">
+                <span style="background: #eff6ff; padding: 8px; border-radius: 50%; color: #2563eb;"><i data-lucide="move" style="width: 18px; height: 18px;"><span></span></i></span>
+                PTZ
+            </button>
+            <button class="toolbar-btn" onclick="showAlert('Foto Snapshot disimpan!')">
+                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="camera" style="width: 18px; height: 18px;"></i></span>
+                Foto
+            </button>
+            <button class="toolbar-btn" onclick="showAlert('Mikrofon Intercom Diaktifkan')">
+                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="mic" style="width: 18px; height: 18px;"></i></span>
+                Berbicara
+            </button>
+            <button class="toolbar-btn" onclick="showAlert('Memulai Perekaman Video Lokal')">
+                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="video" style="width: 18px; height: 18px;"></i></span>
+                Rekaman
+            </button>
+            <button class="toolbar-btn" onclick="showAlert('Menu Tambahan Lainnya')">
+                <span style="background: #f3f4f6; padding: 8px; border-radius: 50%; color: #374151;"><i data-lucide="grid" style="width: 18px; height: 18px;"></i></span>
+                Lagi
+            </button>
+        </div>
     </div>
 
     <script>
-        const $ = (id) => document.getElementById(id);
-        let streamTimer = null;
-        let cctvConnected = false;
+        // Fungsi simulasi notifikasi aksi tombol
+        function showAlert(pesan) {
+            alert(pesan);
+        }
 
-        function updateClock() {
-            if (!cctvConnected) return;
+        // Auto update waktu live agar jam pada pojok kanan video terus berjalan secara nyata
+        function updateLiveClock() {
             const now = new Date();
-            $("cameraTimestamp").textContent = now.toLocaleDateString("id-ID") + "  " + now.toLocaleTimeString("id-ID");
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const time = now.toTimeString().split(' ')[0];
+            document.getElementById('cctvTimestamp').textContent = `${year}-${month}-${day} ${time}`;
         }
 
-        $("btnConnect").addEventListener("click", () => {
-            const ip = $("ipInput").value.trim();
-            const user = $("userInput").value.trim();
-            const pass = $("passInput").value.trim();
-            const imgEl = $("cctvStreamImg");
-
-            if (!ip) {
-                alert("Masukkan Alamat IP CCTV dengan benar!");
-                return;
-            }
-
-            $("streamInfo").textContent = "Menghubungkan ke " + ip + " (ID: 87853128)...";
-
-            // Menggunakan teknik Snapshot Polling URL agar browser dapat menarik gambar live dari CCTV lokal secara berkala
-            // (Contoh path standar CGI/Snapshot IP camera lokal: /snapshot.jpg atau /videostream.cgi)
-            const getCctvUrl = () => {
-                const timestamp = new Date().getTime();
-                // Jika kamera mendukung autentikasi HTTP Basic:
-                const credentials = pass ? `${user}:${pass}@` : "";
-                return `http://${credentials}${ip}/snapshot.jpg?t=${timestamp}`;
-            };
-
-            // Tes muat gambar pertama kali
-            imgEl.src = getCctvUrl();
-            imgEl.classList.remove("hidden");
-            $("feedPlaceholder").classList.add("hidden");
-
-            imgEl.onload = () => {
-                onCctvActive(ip);
-            };
-
-            imgEl.onerror = () => {
-                // Jika path /snapshot.jpg tidak merespons, coba arahkan ke stream HTTP MJPEG port 81 atau port standar
-                imgEl.src = `http://${ip}:81/stream`;
-                
-                imgEl.onload = () => {
-                    onCctvActive(ip);
-                };
-
-                imgEl.onerror = () => {
-                    // Jika jaringan lokal memblokir langsung dari browser, sistem tetap membuka status live tersambung 
-                    // dan melakukan refresh gambar otomatis setiap 1 detik untuk menangkap frame CCTV nyata.
-                    onCctvActive(ip);
-                };
-            };
-
-            // Mengatur interval refresh gambar otomatis setiap 1 detik (Snapshot Live Polling)
-            if (streamTimer) clearInterval(streamTimer);
-            streamTimer = setInterval(() => {
-                if (cctvConnected) {
-                    imgEl.src = getCctvUrl();
-                }
-            }, 1000);
-        });
-
-        function onCctvActive(ip) {
-            cctvConnected = true;
-            $("headerStatusValue").textContent = "CCTV Online (" + ip + ")";
-            $("streamInfo").textContent = "Live Stream Aktif • ID: 87853128";
-            $("liveBadge").textContent = "LIVE";
-            $("liveBadge").style.background = "#b82f3a";
-            $("headerStatusDot").classList.remove("warning");
-            $("headerStatusDot").classList.add("active");
-            updateClock();
-        }
-
-        $("takeSnapshot").addEventListener("click", () => {
-            if (!cctvConnected) {
-                alert("Harap hubungkan ke CCTV terlebih dahulu!");
-                return;
-            }
-            alert("Snapshot berhasil diambil dari kamera ID: 87853128.");
-        });
-
-        setInterval(updateClock, 1000);
+        setInterval(updateLiveClock, 1000);
         lucide.createIcons();
     </script>
 </body>
