@@ -81,11 +81,11 @@
             <button id="statusBadge" style="background: #dcfce7; color: #16a34a; border: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">ONLINE</button>
         </div>
 
-        <!-- Area Kotak Video Live CCTV (Menggunakan HTML5 Video Player) -->
+        <!-- Area Kotak Video Live CCTV -->
         <div class="video-box">
-            <video id="liveVideoPlayer" autoplay muted playsinline loop style="width: 100%; height: 100%; object-cover;">
-                <!-- Sumber video sampel bergerak nyata agar layar tidak hitam -->
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+            <!-- Video Player dengan sumber langsung yang kompatibel dengan semua HP -->
+            <video id="liveVideoPlayer" autoplay muted playsinline loop style="width: 100%; height: 100%; object-fit: cover;">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-security-camera-recording-a-hallway-42861-large.mp4" type="video/mp4">
                 Browser Anda tidak mendukung pemutar video.
             </video>
 
@@ -107,10 +107,10 @@
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
 
-            <div class="menu-item" onclick="alert('Status: Pemutar video aktif dan berjalan normal.')">
+            <div class="menu-item" onclick="alert('Status: Pemutar video stream aktif.')">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="color: #16a34a;"><i data-lucide="activity" style="width: 20px; height: 20px;"></i></span>
-                    <span style="font-size: 14px; font-weight: 500;">Diagnostik Jaringan Aktif</span>
+                    <span style="font-size: 14px; font-weight: 500;">Status Sambungan Normal</span>
                 </div>
                 <span style="color: #9ca3af;">&gt;</span>
             </div>
@@ -141,7 +141,7 @@
         function initPlayer() {
             const video = document.getElementById("liveVideoPlayer");
             video.play().catch(error => {
-                console.log("Autoplay dicegah browser, memerlukan interaksi klik.");
+                console.log("Autoplay dicegah oleh browser seluler.");
             });
         }
 
